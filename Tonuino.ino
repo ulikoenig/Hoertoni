@@ -102,7 +102,7 @@ const uint8_t statusLedPin = 6;                     // pin used for status led
 const uint8_t nfcResetPin = 9;                      // used for spi communication to nfc module
 const uint8_t nfcSlaveSelectPin = 10;               // used for spi communication to nfc module
 const uint8_t rngSeedPin = A0;                      // used to seed the random number generator
-const uint8_t buPins[] = { A0, A1, A2 };            // pins used for the buttons
+const uint8_t buPins[] = { A0, A1, A2, A4, A5 };    // pins used for the buttons
 const uint8_t buCount = sizeof(buPins);             // number of buttons
 const uint8_t mp3StartVolume = 10;                  // initial volume of DFPlayer Mini
 const uint8_t mp3MaxVolume = 25;                    // maximal volume of DFPlayer Mini
@@ -153,8 +153,8 @@ enum { UNCHANGED, PUSH, RELEASE };                  // button states: UNCHANGED 
 
 // button actions
 enum { NOACTION,                                    // NOACTION, 0
-       B1P, B2P, B3P,                               // single button pushes, 1 -> buCount
-       B1H, B2H, B3H,                               // single button holds, buCount + 1 -> 2 * buCount
+       B1P, B2P, B3P, B4P, B5P,                     // single button pushes, 1 -> buCount
+       B1H, B2H, B3H, B4H, B5H,                     // single button holds, buCount + 1 -> 2 * buCount
        B23H,                                        // multi button holds and
        IRU, IRD, IRL, IRR, IRC, IRM, IRP            // ir remote events, 2 * buCount + 1 -> END
      };
@@ -1057,6 +1057,16 @@ void loop() {
     // bloody hack: increase volume 1 step because it got decreased before due to single button push action
     if (inputEvent == B3H) mp3.increaseVolume();
     playNextTrack(random(65536), false, true);
+  }
+  // button 4 (next) press  while playing
+  else if ((inputEvent == B4P && !isLocked)  && nfcTag.playbackMode == 2 && isPlaying) {
+    Serial.println(F("sys | Button: next track"));
+    if (inputEvent == B4P) playNextTrack(mp3.getCurrentTrack(),true,true);
+  }
+  // button 5 (prev) press  while playing
+  else if ((inputEvent == B5P && !isLocked)  && nfcTag.playbackMode == 2 && isPlaying) {
+    Serial.println(F("sys | Button: previous track"));
+    if (inputEvent == B5P) playNextTrack(mp3.getCurrentTrack(),false,true);
   }
   // button 2 (right) & button 3 (left) multi hold for 2 sec or ir remote menu, only while not playing: erase nfc tag
   else if (((inputEvent == B23H && !isLocked) || inputEvent == IRM) && !isPlaying) {
