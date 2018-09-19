@@ -945,6 +945,13 @@ void loop() {
                                    0x00, 0x00, 0x00, 0x00,            // reserved for future use
                                    0x00, 0x00, 0x00, 0x00             // reserved for future use
                                  };
+		// for debug purposes, print the 16 bytes we are going write to the nfc tag
+        Serial.print(F("sys |"));
+        for (uint8_t i = 0; i < 16; i++) {
+          Serial.print(bytesToWrite[i] < 0x10 ? " 0" : " ");
+          Serial.print(bytesToWrite[i], HEX);
+        }
+        Serial.println();
         uint8_t writeNfcTagStatus = writeNfcTagData(bytesToWrite, sizeof(bytesToWrite));
         // handle return codes from events that happened during writing to the nfc tag
         switch (writeNfcTagStatus) {
