@@ -945,7 +945,7 @@ void loop() {
                                    0x00, 0x00, 0x00, 0x00,            // reserved for future use
                                    0x00, 0x00, 0x00, 0x00             // reserved for future use
                                  };
-		// for debug purposes, print the 16 bytes we are going write to the nfc tag
+		// for debug purposes, print the first 16 bytes of sector 1 / block 4
         Serial.print(F("sys |"));
         for (uint8_t i = 0; i < 16; i++) {
           Serial.print(bytesToWrite[i] < 0x10 ? " 0" : " ");
