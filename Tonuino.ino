@@ -470,6 +470,13 @@ uint8_t readNfcTagData() {
           nfcTag.assignedFolder = mifareData[5];
           nfcTag.playbackMode = mifareData[6];
 		  nfcTag.trackInFolder = mifareData[7];
+        } 
+		// if cookie is blank, clear ncfTag object
+        else {
+          nfcTag.cookie = 0;
+          nfcTag.version = 0;
+          nfcTag.assignedFolder = 0;
+          nfcTag.playbackMode = 0;
         }
         returnCode = 1;
       }
